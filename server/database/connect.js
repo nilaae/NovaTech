@@ -1,18 +1,20 @@
-import mongoose from 'mongoose'
+import mongoose from "mongoose";
+import dns from "dns";
 
-const connectDB = () =>{
-    try{
-        mongoose.set('strictQuery',false);
-        const con = mongoose.connect(process.env.MONGO_URI,{
-            useNewUrlParser:true,
-            useUnifiedTopology:true,
-            // useCreateIndex:true,
-            // useFindAndModify:false,
-        })
-    }
-    catch(error){
-        console.log(error || `connection error.`)
-    }
-}
+const connectDB = async () => {
+  try {
+    mongoose.set("strictQuery", false);
 
-export default connectDB
+    dns.setServers(["8.8.8.8", "8.8.4.4"]);
+
+    await mongoose.connect(process.env.MONGO_URI);
+
+    console.log("✅ MongoDB Connected");
+  } catch (error) {
+    console.error("❌ MongoDB Connection Error:");
+    console.error(error);
+    process.exit(1);
+  }
+};
+
+export default connectDB;

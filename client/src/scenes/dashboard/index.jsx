@@ -1,7 +1,9 @@
 import React from 'react'
-import { DownloadOutlined,Email,PointOfSale,PersonAdd, Traffic } from '@mui/icons-material'
-import { Box,Typography,Button,useTheme,useMediaQuery } from '@mui/material'
-import {DataGrid} from '@mui/x-data-grid'
+import * as XLSX from "xlsx"
+import { saveAs } from "file-saver"
+import { DownloadOutlined, Email, PointOfSale, PersonAdd, Traffic } from '@mui/icons-material'
+import { Box, Typography, Button, useTheme, useMediaQuery } from '@mui/material'
+import { DataGrid } from '@mui/x-data-grid'
 import BreakdownChart from 'components/BreakdownChart'
 import OverviewChart from 'components/OverviewChart'
 import StatBox from 'components/StatBox'
@@ -9,58 +11,92 @@ import Header from 'components/Header'
 import FlexBetween from 'components/FlexBetween'
 import { useGetDashboardQuery } from 'state/api'
 
-const Dashboard = () =>{
+const Dashboard = () => {
     const theme = useTheme()
     const isNonMediumScreens = useMediaQuery("(min-width:1200px)")
-    const { data,isLoading } = useGetDashboardQuery()
+    const { data, isLoading } = useGetDashboardQuery()
+    const handleDownload = () => {
+        if (!data) return;
+
+        const report = [
+            {
+                "تعداد مشتریان": data.totalCustomers,
+                "فروش امروز": data.todayStats.totalSales,
+                "فروش ماه": data.thisMonthStats.totalSales,
+                "فروش سال": data.yearlySalesTotal,
+            }
+        ]
+
+        const worksheet = XLSX.utils.json_to_sheet(report);
+        const workbook = XLSX.utils.book_new()
+
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Dashboard")
+
+        const excelBuffer = XLSX.write(workbook, {
+            bookType: "xlsx",
+            type: "array",
+        })
+
+        const file = new Blob(
+            [excelBuffer],
+            {
+                type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            }
+        )
+
+        saveAs(file, "NovaTech_Report.xlsx");
+    }
 
     const columns = [
         {
-            field:"_id",
-            headerName:"ID",
-            flex:1
+            field: "_id",
+            headerName: "شناسه",
+            flex: 1
         },
         {
-            field:"userId",
-            headerName:"User ID",
-            flex:1
+            field: "userId",
+            headerName: "شناسه کاربر",
+            flex: 1
         },
         {
-            field:"createdAt",
-            headerName:"Created At",
-            flex:1
+            field: "createdAt",
+            headerName: "تاریخ",
+            flex: 1,
+            renderCell: (params) =>
+                new Date(params.value).toLocaleDateString("fa-IR")
         },
         {
-            field:"products",
-            headerName:"# of Products",
-            flex:0.5,
-            sortable:false,
+            field: "products",
+            headerName: "تعداد محصولات",
+            flex: 0.5,
+            sortable: false,
             renderCell: (params) => params.value.length
         },
         {
-            field:"cost",
-            headerName:"Cost",
-            flex:1,
-            sortable:false,
-            renderCell: (params) => `$${Number(params.value).toFixed(2)}`
+            field: "cost",
+            headerName: "مبلغ",
+            flex: 1,
+            sortable: false,
+            renderCell: (params) => `${Number(params.value).toLocaleString("fa-IR")} تومان`
         },
     ]
-    return(
-        <Box m="1.5rem 2.5rem">
+    return (
+        <Box sx={{ m: "1.5rem", mx: "2.5rem" }}>
             <FlexBetween>
-                <Header title="DASHBOARD" subtitle="Welcome to your dashboard"/>
+                <Header title="داشبورد" subtitle="خلاصه وضعیت فروشگاه" />
                 <Box>
                     <Button
+                        onClick={handleDownload}
                         sx={{
-                            backgroundColor:theme.palette.secondary.light,
-                            color:theme.palette.background.alt,
-                            fontSize:"14px",
-                            fontWeight:"bold",
-                            padding:"10px 20px"
+                            backgroundColor: theme.palette.secondary.light,
+                            color: theme.palette.background.alt,
+                            fontSize: "14px",
+                            fontWeight: "bold",
+                            padding: "10px 20px"
                         }}
                     >
-                        <DownloadOutlined sx={{ mr: "10px" }} />
-                        Download Report
+                        <DownloadOutlined sx={{ ml: "10px" }} />
+                        دانلود گزارش
                     </Button>
                 </Box>
             </FlexBetween>
@@ -71,24 +107,24 @@ const Dashboard = () =>{
                 gridAutoRows="160px"
                 gap="20px"
                 sx={{
-                    "& > div": {gridColumn: isNonMediumScreens ? undefined : "span 12"}
+                    "& > div": { gridColumn: isNonMediumScreens ? undefined : "span 12" }
                 }}
             >
-                <StatBox 
-                    title="Total Customers"
-                    value={ data && data.totalCustomers }
+                <StatBox
+                    title="تعداد مشتریان"
+                    value={data && data.totalCustomers}
                     increase="+14%"
-                    description="Since last month"
+                    description="از ماه گذشته"
                     icon={
                         <Email sx={{ color: theme.palette.secondary[300], fontSize: "26px" }} />
                     }
                 />
 
-                <StatBox 
-                    title="Sales today"
-                    value={ data && data.todayStats.totalSales }
+                <StatBox
+                    title="فروش امروز"
+                    value={data && data.todayStats.totalSales}
                     increase="+21%"
-                    description="Since last month"
+                    description="از ماه گذشته"
                     icon={
                         <PointOfSale sx={{ color: theme.palette.secondary[300], fontSize: "26px" }} />
                     }
@@ -100,22 +136,22 @@ const Dashboard = () =>{
                     p="1rem"
                     borderRadius="0.55rem"
                 >
-                    <OverviewChart view="sales" isDashboard={true}/>
+                    <OverviewChart view="sales" isDashboard={true} />
                 </Box>
-                <StatBox 
-                    title="Monthly Sales"
-                    value={ data && data.thisMonthStats.totalSales }
+                <StatBox
+                    title="فروش ماهانه"
+                    value={data && data.thisMonthStats.totalSales}
                     increase="+5%"
-                    description="Since last month"
+                    description="از ماه گذشته"
                     icon={
                         <PersonAdd sx={{ color: theme.palette.secondary[300], fontSize: "26px" }} />
                     }
                 />
-                <StatBox 
-                    title="Yearly Sales"
-                    value={ data && data.yearlySalesTotal }
+                <StatBox
+                    title="فروش سالانه"
+                    value={data && data.yearlySalesTotal}
                     increase="+43%"
-                    description="Since last month"
+                    description="از ماه گذشته"
                     icon={
                         <Traffic sx={{ color: theme.palette.secondary[300], fontSize: "26px" }} />
                     }
@@ -124,29 +160,29 @@ const Dashboard = () =>{
                     gridColumn="span 8"
                     gridRow="span 3"
                     sx={{
-                        "& .MuiDataGrid-root":{
-                            border:"none"
+                        "& .MuiDataGrid-root": {
+                            border: "none"
                         },
-                        "& .MuiDataGrid-cell":{
-                            borderBottom:"none"
+                        "& .MuiDataGrid-cell": {
+                            borderBottom: "none"
                         },
-                        "& .MuiDataGrid-columnHeaders":{
-                            backgroundColor:theme.palette.background.alt,
+                        "& .MuiDataGrid-columnHeaders": {
+                            backgroundColor: theme.palette.background.alt,
                             color: theme.palette.secondary[100],
                             borderBottom: "none"
                         },
-                        "& .MuiDataGrid-virtualScroller":{
-                            backgroundColor:theme.palette.primary.light
+                        "& .MuiDataGrid-virtualScroller": {
+                            backgroundColor: theme.palette.primary.light
                         },
-                        "& .MuiDataGrid-footerContainer":{
-                            backgroundColor:theme.palette.background.alt,
+                        "& .MuiDataGrid-footerContainer": {
+                            backgroundColor: theme.palette.background.alt,
                             color: theme.palette.secondary[100],
-                            borderTop:"none"
+                            borderTop: "none"
                         },
-                        "& .MuiDataGrid-toolbarContainer .MuiButton-text":{
+                        "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
                             color: `${theme.palette.secondary[200]} !important`
                         }
-                       }}
+                    }}
                 >
                     <DataGrid
                         loading={isLoading || !data}
@@ -163,11 +199,11 @@ const Dashboard = () =>{
                     borderRadius='0.55rem'
                 >
                     <Typography variant='h6' sx={{ color: theme.palette.secondary[100] }}>
-                       Sales By Category
+                        فروش بر اساس دسته‌بندی
                     </Typography>
-                    <BreakdownChart isDashboard={true}/>
-                    <Typography p='0 0.6rem' fontSize='0.8rem' sx={{ color:theme.palette.secondary[200]}}>
-                        Breakdown real states and and information via category for revenue made this year
+                    <BreakdownChart isDashboard={true} />
+                    <Typography p='0 0.6rem' fontSize='0.8rem' sx={{ color: theme.palette.secondary[200] }}>
+                        نمایش میزان فروش هر دسته از محصولات در سال جاری
                     </Typography>
                 </Box>
             </Box>

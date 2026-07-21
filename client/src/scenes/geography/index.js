@@ -12,7 +12,7 @@ const Geography = () =>{
 
     return(
         <Box m="1.5rem 2.5rem">
-            <Header title="GEOGRAPHY" subtitle="Find where your users are located"/>
+            <Header title="پراکندگی کاربران" subtitle="موقعیت جغرافیایی کاربران"/>
             <Box 
                 mt="40px"
                 height="75vh"
@@ -56,7 +56,7 @@ const Geography = () =>{
                         }
                     }}
                     features={geoData.features}
-                    margin={{ top: 0, right: 0, bottom: 0, left: -50 }}
+                    margin={{ top: 0, right: 120, bottom: 0, left: -50 }}
                     domain={[ 0, 1000000 ]}
                     unknownColor="#666666"
                     label="properties.name"
@@ -71,10 +71,10 @@ const Geography = () =>{
                             anchor: 'bottom-right',
                             direction: 'column',
                             justify: true,
-                            translateX: 0,
+                            translateX: -20,
                             translateY: -125,
                             itemsSpacing: 0,
-                            itemWidth: 94,
+                            itemWidth: 120,
                             itemHeight: 18,
                             itemDirection: 'left-to-right',
                             itemTextColor: theme.palette.secondary[200],

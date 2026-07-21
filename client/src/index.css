@@ -8,6 +8,10 @@ body,
     width:100%;
     font-family:"Inter",sans-serif;
 }
+body{
+    direction: rtl;
+    text-align: right;
+}
 ::-webkit-scrollbar{
     width: 10px;
 }

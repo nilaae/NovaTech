@@ -1,89 +1,96 @@
-import React,{useState} from 'react'
+import React, { useState } from 'react'
 import { DataGrid } from '@mui/x-data-grid'
-import { Box,useTheme } from '@mui/material'
+import { Box, useTheme } from '@mui/material'
 import { useGetTransactionsQuery } from 'state/api'
 import Header from 'components/Header'
 import DataGridCustomToolbar from 'components/DataGridCustomToolbar'
 
-const Transactions = () =>{
+const Transactions = () => {
     const theme = useTheme()
 
     //values sent to backend
-    const [page,setPage] = useState(0)
-    const [pageSize,setPageSize] = useState(20)
-    const [sort,setSort] = useState({})
-    const [search,setSearch] = useState("")
-    const [searchInput,setSearchInput] = useState("")
+    const [page, setPage] = useState(0)
+    const [pageSize, setPageSize] = useState(20)
+    const [sort, setSort] = useState({})
+    const [search, setSearch] = useState("")
+    const [searchInput, setSearchInput] = useState("")
 
-    const {data,isLoading} = useGetTransactionsQuery({
+    const { data, isLoading } = useGetTransactionsQuery({
         page,
         pageSize,
         sort: JSON.stringify(sort),
         search,
     })
-    
+
     const columns = [
         {
-            field:"_id",
-            headerName:"ID",
-            flex:1
+            field: "_id",
+            headerName: "ID",
+            flex: 1
         },
         {
-            field:"userId",
-            headerName:"User ID",
-            flex:1
+            field: "userId",
+            headerName: "شناسه کاربر",
+            flex: 1
         },
         {
-            field:"createdAt",
-            headerName:"Created At",
-            flex:1
+            field: "createdAt",
+            headerName: "تاریخ",
+            flex: 1,
+            renderCell: ({ value }) =>
+                new Date(value).toLocaleDateString("fa-IR")
         },
         {
-            field:"products",
-            headerName:"# of Products",
-            flex:0.5,
-            sortable:false,
-            renderCell: (params) => params.value.length
+            field: "products",
+            headerName: "تعداد محصولات",
+            flex: 0.5,
+            sortable: false,
+            renderCell: (params) =>
+                params.value.length.toLocaleString("fa-IR")
         },
         {
-            field:"cost",
-            headerName:"Cost",
-            flex:1,
-            sortable:false,
-            renderCell: (params) => `$${Number(params.value).toFixed(2)}`
+            field: "cost",
+            headerName: "مبلغ",
+            flex: 1,
+            sortable: false,
+            renderCell: ({ value }) => (
+                <Box dir="ltr" sx={{ width: "100%", textAlign: "left" }}>
+                    {Number(value).toLocaleString("fa-IR")} تومان
+                </Box>
+            )
         },
     ]
 
-    return(
+    return (
         <Box m="1.5rem 2.5rem">
-        <Header title="TRANSACTIONS" subtitle="List of all transactions"/>
+            <Header title="تراکنش‌ها" subtitle="لیست تراکنش‌های فروشگاه" />
             <Box
                 mt="40px"
                 height="80vh"
                 sx={{
-                "& .MuiDataGrid-root":{
-                    border:"none"
-                },
-                "& .MuiDataGrid-cell":{
-                    borderBottom:"none"
-                },
-                "& .MuiDataGrid-columnHeaders":{
-                    backgroundColor:theme.palette.background.alt,
-                    color: theme.palette.secondary[100],
-                    borderBottom: "none"
-                },
-                "& .MuiDataGrid-virtualScroller":{
-                    backgroundColor:theme.palette.primary.light
-                },
-                "& .MuiDataGrid-footerContainer":{
-                    backgroundColor:theme.palette.background.alt,
-                    color: theme.palette.secondary[100],
-                    borderTop:"none"
-                },
-                "& .MuiDataGrid-toolbarContainer .MuiButton-text":{
-                    color: `${theme.palette.secondary[200]} !important`
-                }
-               }}
+                    "& .MuiDataGrid-root": {
+                        border: "none"
+                    },
+                    "& .MuiDataGrid-cell": {
+                        borderBottom: "none"
+                    },
+                    "& .MuiDataGrid-columnHeaders": {
+                        backgroundColor: theme.palette.background.alt,
+                        color: theme.palette.secondary[100],
+                        borderBottom: "none"
+                    },
+                    "& .MuiDataGrid-virtualScroller": {
+                        backgroundColor: theme.palette.primary.light
+                    },
+                    "& .MuiDataGrid-footerContainer": {
+                        backgroundColor: theme.palette.background.alt,
+                        color: theme.palette.secondary[100],
+                        borderTop: "none"
+                    },
+                    "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
+                        color: `${theme.palette.secondary[200]} !important`
+                    }
+                }}
             >
                 <DataGrid
                     loading={isLoading || !data}
@@ -91,18 +98,18 @@ const Transactions = () =>{
                     rows={(data && data.transactions) || []}
                     columns={columns}
                     rowCount={(data && data.total) || 0}
-                    roPageOptions={[ 20,50,100 ]}
+                    roPageOptions={[20, 50, 100]}
                     pagination
                     page={page}
                     pageSize={pageSize}
                     paginationMode="server"
                     sortingMode="server"
-                    onPageChange={ (newPage) => setPage(newPage) }
-                    onPageSizeChange={ (newPageSize) => setPageSize(newPageSize) }
-                    onSortModelChange={ (newSortModel) => setSort(...newSortModel) }
+                    onPageChange={(newPage) => setPage(newPage)}
+                    onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+                    onSortModelChange={(newSortModel) => setSort(...newSortModel)}
                     components={{ Toolbar: DataGridCustomToolbar }}
                     componentsProps={{
-                        toolbar:{searchInput,setSearchInput,setSearch}
+                        toolbar: { searchInput, setSearchInput, setSearch }
                     }}
                 />
             </Box>

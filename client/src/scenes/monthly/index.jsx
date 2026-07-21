@@ -7,9 +7,24 @@ import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css';
 import Loader from 'loader/Loader'
 
+const monthMap = {
+    january: "فروردین",
+    february: "اردیبهشت",
+    march: "خرداد",
+    april: "تیر",
+    may: "مرداد",
+    june: "شهریور",
+    july: "مهر",
+    august: "آبان",
+    september: "آذر",
+    october: "دی",
+    november: "بهمن",
+    december: "اسفند",
+}
+
 const Monthly = () =>{
-    const [startDate,setStartDate] = useState(new Date("2021-02-01"))
-    const [endDate,setEndDate] = useState(new Date("2021-03-01"))
+    // const [startDate,setStartDate] = useState(new Date("2021-02-01"))
+    // const [endDate,setEndDate] = useState(new Date("2021-03-01"))
 
     const { data } = useGetSalesQuery()
     const theme = useTheme()
@@ -19,12 +34,12 @@ const Monthly = () =>{
 
         const { monthlyData } = data
         const totalSalesLine = {
-            id:"totalSales",
+            id:"فروش",
             color: theme.palette.secondary.main,
             data:[]
         }
         const totalUnitsLine = {
-            id:"totalUnits",
+            id:"تعداد فروش",
             color: theme.palette.secondary[600],
             data:[]
         }
@@ -32,11 +47,11 @@ const Monthly = () =>{
         Object.values(monthlyData).forEach(({month,totalSales,totalUnits})=>{
             totalSalesLine.data = [
                 ...totalSalesLine.data,
-                {x: month,y: totalSales}
+                {x: monthMap[month.toLowerCase()] || month, y: totalSales}
             ];
             totalUnitsLine.data = [
                 ...totalUnitsLine.data,
-                {x: month,y: totalUnits}
+                {x: monthMap[month.toLowerCase()] || month, y: totalUnits}
             ];
 
             
@@ -48,9 +63,9 @@ const Monthly = () =>{
 
     return(
         <Box m="1.5rem 2.5rem">
-            <Header title="MONTHLY SALES" subtitle="Chart of monthly sales"/>
+            <Header title="گزارش ماهانه" subtitle="نمودار فروش و تعداد فروش ماهانه"/>
             <Box height="75vh">
-                <Box display="flex" justifyContent="flex-end">
+                {/* <Box display="flex" justifyContent="flex-end">
                     <Box>
                         <DatePicker 
                             selected={startDate}
@@ -69,7 +84,7 @@ const Monthly = () =>{
                             endDate={endDate}
                         />
                     </Box>
-                </Box>
+                </Box> */}
                 {
                     data ? 
                     <ResponsiveLine
@@ -117,7 +132,7 @@ const Monthly = () =>{
                             stacked: false,
                             reverse: false
                         }}
-                        yFormat=" >-.2f"
+                        yFormat=">-.0f"
                         // curve="catmullRom"
                         axisTop={null}
                         axisRight={null}
@@ -126,18 +141,20 @@ const Monthly = () =>{
                             tickSize: 5,
                             tickPadding: 5,
                             tickRotation: 90,
-                            legend: "Month",
+                            legend:"ماه",
                             legendOffset: 60,
-                            legendPosition: 'middle'
+                            legendPosition: 'middle',
+                            // format: value => Number(value).toLocaleString("fa-IR")
                         }}
                         axisLeft={{
                             orient: 'left',
                             tickSize: 5,
-                            tickPadding: 5,
+                            tickPadding: 30,
                             tickRotation: 0,
-                            legend: "Total",
+                            legend:"مقدار",
                             legendOffset: -50,
-                            legendPosition: 'middle'
+                            legendPosition: 'middle',
+                            format: value => Number(value).toLocaleString("fa-IR")
                         }}
                         enableGridX={false}
                         enableGridY={false}
@@ -149,30 +166,30 @@ const Monthly = () =>{
                         useMesh={true}
                         legends={
                             [
-                            {
-                                anchor: 'top-right',
-                                direction: 'column',
-                                justify: false,
-                                translateX: 50,
-                                translateY: 0,
-                                itemsSpacing: 0,
-                                itemDirection: 'left-to-right',
-                                itemWidth: 80,
-                                itemHeight: 20,
-                                itemOpacity: 0.75,
-                                symbolSize: 12,
-                                symbolShape: 'circle',
-                                symbolBorderColor: 'rgba(0, 0, 0, .5)',
-                                effects: [
-                                    {
-                                        on: 'hover',
-                                        style: {
-                                            itemBackground: 'rgba(0, 0, 0, .03)',
-                                            itemOpacity: 1
-                                        }
-                                    }
-                                ]
-                            }
+                            // {
+                            //     anchor: 'top-right',
+                            //     direction: 'column',
+                            //     justify: false,
+                            //     translateX: 50,
+                            //     translateY: 0,
+                            //     itemsSpacing: 0,
+                            //     itemDirection: 'left-to-right',
+                            //     itemWidth: 80,
+                            //     itemHeight: 20,
+                            //     itemOpacity: 0.75,
+                            //     symbolSize: 12,
+                            //     symbolShape: 'circle',
+                            //     symbolBorderColor: 'rgba(0, 0, 0, .5)',
+                            //     effects: [
+                            //         {
+                            //             on: 'hover',
+                            //             style: {
+                            //                 itemBackground: 'rgba(0, 0, 0, .03)',
+                            //                 itemOpacity: 1
+                            //             }
+                            //         }
+                            //     ]
+                            // }
                         ]
                     }
                     />:<Loader/>

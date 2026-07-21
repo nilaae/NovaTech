@@ -1,26 +1,26 @@
-import React,{ useState } from 'react'
-import { FormControl,MenuItem,InputLabel,Box,Select } from '@mui/material'
+import React, { useState } from 'react'
+import { FormControl, MenuItem, InputLabel, Box, Select } from '@mui/material'
 import Header from 'components/Header'
 import OverviewChart from 'components/OverviewChart'
 
-const Overview = () =>{
-    const [view,setView] = useState("units")
-    return(
+const Overview = () => {
+    const [view, setView] = useState("units")
+    return (
         <Box m="1.5rem 2.5rem">
-            <Header title="OVERVIEW" subtitle="overview of general revenue and profit"/>
+            <Header title="نمای کلی" subtitle="نمایش کلی درآمد و فروش" />
             <Box height="75vh">
-                <FormControl sx={{ mt:"1rem" }}>
-                    <InputLabel>view</InputLabel>
+                <FormControl sx={{ mt: "1rem", minWidth: 180, direction: "rtl" }}>
+                    <InputLabel>نمایش</InputLabel>
                     <Select
-                       value={view}
-                       label="view"
-                       onChange={ (e) => setView(e.target.value) }
+                        value={view}
+                        label="نمایش"
+                        onChange={(e) => setView(e.target.value)}
                     >
-                        <MenuItem value="sales">Sales</MenuItem>
-                        <MenuItem value="units">Units</MenuItem>
+                        <MenuItem value="sales">فروش</MenuItem>
+                        <MenuItem value="units">تعداد فروش</MenuItem>
                     </Select>
                 </FormControl>
-                <OverviewChart view={view}/>
+                <OverviewChart view={view} />
             </Box>
         </Box>
     )

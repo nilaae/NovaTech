@@ -17314,7 +17314,7 @@ export const dataUser = [
     password: "omMDCh",
     city: "Nurabelen",
     state: null,
-    country: "ID",
+    country: "IR",
     occupation: "Computer Systems Analyst I",
     phoneNumber: "8346315874",
     transactions: [
@@ -17458,7 +17458,7 @@ export const dataUser = [
     password: "L6mw336",
     city: "Xian’an",
     state: null,
-    country: "CN",
+    country: "IR",
     occupation: "Senior Quality Engineer",
     phoneNumber: "2982518057",
     transactions: [
@@ -17475,7 +17475,7 @@ export const dataUser = [
     password: "TnE8Lbb",
     city: "Oganlima",
     state: null,
-    country: "ID",
+    country: "IR",
     occupation: "Office Assistant IV",
     phoneNumber: "5967740518",
     transactions: [
@@ -17556,7 +17556,7 @@ export const dataUser = [
     password: "6MbbkQdEUIU",
     city: "Gueset",
     state: null,
-    country: "PH",
+    country: "IR",
     occupation: "Senior Quality Engineer",
     phoneNumber: "7394223360",
     transactions: [
@@ -18322,7 +18322,7 @@ export const dataUser = [
     password: "OPUob50iBIbS",
     city: "‘Alāqahdārī Kirān wa Munjān",
     state: null,
-    country: "AF",
+    country: "IR",
     occupation: "Librarian",
     phoneNumber: "2967030879",
     transactions: [
