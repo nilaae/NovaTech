@@ -34,8 +34,8 @@ const Daily = () => {
 
         Object.values(dailyData).forEach(({ date, totalSales, totalUnits }) => {
             const dateFormatted = new Date(date)
-            const start = new Date(startDate)
-            const end = new Date(endDate)
+            // const start = new Date(startDate)
+            // const end = new Date(endDate)
 
             if (dateFormatted >= startDate && dateFormatted <= endDate) {
                 const splitDate = new Date(date).toLocaleDateString("fa-IR", {

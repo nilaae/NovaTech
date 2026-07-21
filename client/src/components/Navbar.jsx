@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
-import { LightModeOutlined, DarkModeOutlined, Menu as MenuIcon, Search, SettingsOutlined, ArrowDropDownOutlined } from '@mui/icons-material'
+import { LightModeOutlined, DarkModeOutlined, Menu as MenuIcon, ArrowDropDownOutlined } from '@mui/icons-material'
 import FlexBetween from 'components/FlexBetween'
 import { useDispatch } from 'react-redux'
 import { setMode } from 'state'
 import ProfileImage from 'assets/profile.jpeg'
-import { AppBar, Toolbar, useTheme, InputBase, IconButton, Button, Box, Typography, Menu, MenuItem } from '@mui/material'
+import { AppBar, Toolbar, useTheme, IconButton, Button, Box, Typography, Menu, MenuItem } from '@mui/material'
 
 const Navbar = ({
     user,
@@ -66,9 +66,6 @@ const Navbar = ({
                                 <LightModeOutlined sx={{ fontSize: "25px" }} />
                             )}
                     </IconButton>
-                    {/* <IconButton>
-                        <SettingsOutlined sx={{ fontSize: "25px" }} />
-                    </IconButton> */}
                     <FlexBetween>
                         <Button onClick={handleClick} sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", textTransform: "none", gap: "1rem" }}>
                             <Box

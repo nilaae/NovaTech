@@ -14,7 +14,6 @@ import {
 } from '@mui/material'
 
 import {
-    SettingsOutlined,
     ChevronLeft,
     HomeOutlined,
     ShoppingCartOutlined,
